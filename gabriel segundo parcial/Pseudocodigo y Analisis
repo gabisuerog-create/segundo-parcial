@@ -1,0 +1,27 @@
+#Plan de desarrollo y analisis del algoritmo - reto PMC16
+
+## 1. Analisis del problema:
+El sistema simula el procesamiento independiente de celdas mecatronicas a partir de rafagas de muestras numericas.
+-Cada unidad posee un identificador unico ("id"), una etiqueta ("nombre"), una configuracion anidada ("tipo y "p"), y vectores de mediciones ("muestras").
+-El presupuesto operativo se define como $p + 50$.
+-El recorrido se ejecuta de izquierda a derecha ("tipo == 0") o de derecha a izquierda ("tipo == 1"), aceptando muestras que la suma acumulada no supere el presupuesto.
+-Se evaluan criterios estrictos de validaion de dominios (rangos de $n, m, q$, muestras entre 0 y 100, unicidad de IDs). si ocurre cualquier anomalia, el programa emite unicamente "ERROR"
+y termina.
+
+## 2.Pseudocodigo General:
+
+Inicio
+   Leer n, m, q
+   Si n, m o q estan fuera de dominio entonces imprimir ERROR y terminar.
+   Para i = 0 hasta n-1:
+      Leer id, nombre, tipo, p, y las m muestras.
+      Validar rangos y unicidad de ID. Si falla, imprimir ERRORy terminar.
+      Ejecutar funcion calcular(muestras, m, tipo, p, &estado, &score)
+   Fin para
+   Verificar fin de archivo / tokens extra. si sobran datos, imprimir ERROR y terminar.
+
+   Imprimir resultados en orden original (id score activado).
+   Calcular y mostrar TOTAL usando funcion recursiva "total_rec".
+   Ordenar una copia de los registros por criterio secundario (score descendente, id ascendente) y mostrar "ORDER".
+   Ordenar otra copia ID, realizar busqueda binaria del identificador "q" y mostrar "FIND".
+Fin.

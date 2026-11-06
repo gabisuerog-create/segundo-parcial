@@ -1,0 +1,55 @@
+JSON
+
+[
+  {
+    "grupo": 1,
+    "entrada": "2 5 30\n30 MOTOR 0 40 10 50 70 30 90\n10 VALVULA 1 20 20 25 10 80 5\n",
+    "salida":  "30 3 1\n10 4 1\nTOTAL 7\nORDER 10 30\nFIND 30 3\n"
+},
+{
+    "grupo": 2,
+    "entrada": "1 1 1\n1 A 0 0 0\n",
+    "salida": "1 1 0\nTOTAL 1\nORDER 1\nFIND 1 1\n"
+},
+{
+    "grupo": 3,
+    "entrada": "2 8 10\n10 LIMITE 0 50 100 50 50 60 50 100 0\n20 MODO 1 50 0 100 50 50 60 50 100 0\n",
+    "salida": "30 2 1\n20 2 1\n10 2 1\nTOTAL 6\nORDER 10 20 30\nFIND 20 2\n"
+},
+{
+    "grupo": 4,
+    "entrada": "2 8 10\n10 LIMITE 0 50 0 100 50 50 60 50 100 0\n20 MODO 1 50 0 100 50 50 60 50 100 0\n",
+    "salida": "10 3 1\n20 3 1\nTOTAL 6\nORDER 10 20\nFIND 10 3\n"
+},
+{
+    "grupo": 5,
+    "entrada": "2 4 99\n8 SIN 1 100 100 0 100 0\n3 OTRO 0 100 0 0 0 0\n",
+    "salida": "8 3 1\n3 4 0\nTOTAL 7\nORDER 3 8\nFIND 99 -1\n"
+},
+{
+    "grupo": 6,
+    "entrada": "1 1 1\n1 ERROR 0 50 101\n",
+    "salida": "ERROR\n"
+}   
+]
+
+
+
+Phython 
+
+import json, subprocess, sys
+from pathlib import path
+casos = json.loads(path(sys.argv[1]).read_text(enconding="utf-8"))
+exe = str(path(sys.arg[1]).resolve()(
+ok = 0
+for c in casos:
+    try:
+       r= subprocess.run([exe], input=c["entrada"], text=True,
+                          capture_output=True, timeout=2)
+       pasa= r.returncode == 0 and r.stdout.split() == c["salida"].split()
+    except (subprocess.TimeoutExpired, 0SError):
+        pasa= False
+    ok += pasa
+    print("Grupo", c["grupo"], "OK" if pasa else "FALLO")
+print("Casos correctos:", ok, "/", len(casos))
+sys.exit(0 if ok == len(casos) else 1)
